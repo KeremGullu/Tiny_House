@@ -1,0 +1,75 @@
+@using Veritabanı_proje.Models.ViewModels
+@model EvSahibiDashboardViewModel
+@{
+    ViewData["Title"] = "Ev Sahibi Dashboard";
+}
+
+<div class="container mt-4">
+    <h2>Hoş Geldiniz, @Model.User.FirstName!</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Toplam Ev Sayısı</h5>
+                    <p class="card-text display-4">@Model.TotalHouses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Toplam Kazanç</h5>
+                    <p class="card-text display-4">₺@Model.TotalEarnings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Aktif Rezervasyonlar</h5>
+                    <p class="card-text display-4">@Model.ActiveReservations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <h3>Evlerim</h3>
+            <a href="@Url.Action("CreateTinyHouse")" class="btn btn-primary mb-3">Yeni Ev Ekle</a>
+            
+            @if (!Model.OwnedHouses.Any())
+            {
+                <div class="alert alert-info">
+                    Henüz bir ev eklemediniz.
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var house in Model.OwnedHouses)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@house.Name</h5>
+                                    <p class="card-text">@house.Description</p>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Fiyat:</strong> ₺@house.Price/gece</li>
+                                        <li><strong>Konum:</strong> @house.Location</li>
+                                        <li><strong>Alan:</strong> @house.SquareMeters m²</li>
+                                    </ul>
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("Edit", new { id = house.Id })" class="btn btn-sm btn-primary">Düzenle</a>
+                                        <a href="@Url.Action("Delete", new { id = house.Id })" class="btn btn-sm btn-danger">Sil</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div> 

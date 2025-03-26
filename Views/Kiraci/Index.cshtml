@@ -1,0 +1,69 @@
+@model KiraciDashboardViewModel
+@{
+    ViewData["Title"] = "Kiracı Dashboard";
+}
+
+<div class="container mt-4">
+    <h2>Hoş Geldiniz, @Model.User.FirstName!</h2>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Mevcut İlanlar</h3>
+            <div class="row">
+                @foreach (var house in Model.AvailableHouses)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@house.Name</h5>
+                                <p class="card-text">@house.Description</p>
+                                <ul class="list-unstyled">
+                                    <li><strong>Fiyat:</strong> ₺@house.Price/gece</li>
+                                    <li><strong>Konum:</strong> @house.Location</li>
+                                    <li><strong>Alan:</strong> @house.SquareMeters m²</li>
+                                    <li><strong>Ev Sahibi:</strong> @house.Owner.FirstName @house.Owner.LastName</li>
+                                </ul>
+                                <a href="@Url.Action("HouseDetails", new { id = house.Id })" 
+                                   class="btn btn-primary">Detayları Gör</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Model.UserReservations.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Rezervasyonlarım</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ev</th>
+                                <th>Giriş Tarihi</th>
+                                <th>Çıkış Tarihi</th>
+                                <th>Toplam Fiyat</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var reservation in Model.UserReservations)
+                            {
+                                <tr>
+                                    <td>@reservation.TinyHouse.Name</td>
+                                    <td>@reservation.StartDate.ToShortDateString()</td>
+                                    <td>@reservation.EndDate.ToShortDateString()</td>
+                                    <td>₺@reservation.TotalPrice</td>
+                                    <td>@reservation.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div> 
